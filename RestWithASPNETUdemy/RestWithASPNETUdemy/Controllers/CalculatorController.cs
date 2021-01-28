@@ -20,7 +20,7 @@ namespace RestWithASPNETUdemy.Controllers
 
         // Faz a soma da calculadora
         [HttpGet("sum/{firstNumber}/{secondNumber}")]
-        public IActionResult Get(string firstNumber, string secondNumber)
+        public IActionResult Sum(string firstNumber, string secondNumber)
         {
             if (IsNumeric(firstNumber) && IsNumeric(secondNumber))
             {
@@ -29,6 +29,53 @@ namespace RestWithASPNETUdemy.Controllers
             }
             return BadRequest("Números informados não são validos!");
         }
+
+        // Faz a diferença
+        [HttpGet("Subtracao/{firstNumber}/{secondNumber}")]
+        public IActionResult Subtracao(string firstNumber, string secondNumber)
+        {
+            if (IsNumeric(firstNumber) && IsNumeric(secondNumber))
+            {
+                var subtracao = ConvertToDecimal(firstNumber) - ConvertToDecimal(secondNumber);
+                return Ok(subtracao.ToString());
+            }
+            return BadRequest("Números informados não são validos!");
+        }
+
+        // Faz a diferença
+        [HttpGet("divisao/{firstNumber}/{secondNumber}")]
+        public IActionResult Divisao(string firstNumber, string secondNumber)
+        {
+            if (IsNumeric(firstNumber) && IsNumeric(secondNumber) && (ConvertToDecimal(secondNumber) != 0))
+            {
+                var divisao = ConvertToDecimal(firstNumber) / ConvertToDecimal(secondNumber);
+                return Ok(divisao.ToString());
+            }
+            return BadRequest("Números informados não são validos!");
+        }
+
+        [HttpGet("media/{firstNumber}/{secondNumber}")]
+        public IActionResult Media(string firstNumber, string secondNumber)
+        {
+            if (IsNumeric(firstNumber) && IsNumeric(secondNumber))
+            {
+                var media = (ConvertToDecimal(firstNumber) + ConvertToDecimal(secondNumber))/ 2;
+                return Ok(media.ToString());
+            }
+            return BadRequest("Números informados não são validos!");
+        }
+
+        [HttpGet("raiz/{Number}")]
+        public IActionResult raiz(string Number)
+        {
+            if (IsNumeric(Number))
+            {
+                double raiz = Math.Sqrt(ConvertToDouble(Number));
+                return Ok(raiz.ToString());
+            }
+            return BadRequest("Números informados não são validos!");
+        }
+
         private bool IsNumeric(string strNumber)
         {
             double number;
@@ -49,6 +96,16 @@ namespace RestWithASPNETUdemy.Controllers
             if (decimal.TryParse(strNumber, out decimalValue))
             {
                 return decimalValue;
+            }
+            return 0;
+        }
+
+        private double ConvertToDouble(string strNumber)
+        {
+            double doubleValue;
+            if (double.TryParse(strNumber, out doubleValue))
+            {
+                return doubleValue;
             }
             return 0;
         }
