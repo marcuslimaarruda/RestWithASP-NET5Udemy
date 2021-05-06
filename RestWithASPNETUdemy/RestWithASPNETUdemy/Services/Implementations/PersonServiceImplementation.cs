@@ -1,67 +1,89 @@
 ﻿using RestWithASPNETUdemy.Model;
+using RestWithASPNETUdemy.Model.Context;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace RestWithASPNETUdemy.Services.Implementations
 {
     public class PersonServiceImplementation : IPersonService
     {
-        private volatile int count;
+        private MySQLContext _context;
+
+        public PersonServiceImplementation(MySQLContext context)
+        {
+            _context = context;
+        }
 
         public Person Create(Person person)
         {
+            try
+            {
+                _context.Add(person);
+                _context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
             return person;
         }
 
         public void Delete(long id)
         {
+            var result = _context.Persons.SingleOrDefault(p => p.id.Equals(id));
 
+            if (result != null)
+            {
+                try
+                {
+                    _context.Persons.Remove(result);
+                    _context.SaveChanges();
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+            }
         }
         public List<Person> FindAll()
         {
-            List<Person> persons = new List<Person>();
-            for (int i = 0; i < 8; i++)
-            {
-                Person person = clonePerson(i);
-                persons.Add(person);
-            }
-            return persons;
+
+            return _context.Persons.ToList();
+            //return null;
         }
 
         public Person FindById(long id)
         {
-            return new Person
-            {
-                id = 1,
-                primeiroNome = "Marcus",
-                UltimoNome = "Arruda",
-                Endereco = "Rua Visconde do Uriguai, 315/1103, Centro/Niteroi/Rj - Brasil",
-                Sexo = "Masculino"
-            };
+            return _context.Persons.SingleOrDefault(p => p.id.Equals(id));
+     
         }
 
         public Person Update(Person person)
         {
+            if (!Exists(person.id)) return new Person();
+
+            var result = _context.Persons.SingleOrDefault(p => p.id.Equals(person.id));
+            if (result != null)
+            {
+                try
+                {
+                    _context.Entry(result).CurrentValues.SetValues(person);
+                    _context.SaveChanges();
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+            }
+
+    
             return person;
         }
-        private Person clonePerson(int i)
-        {
-            return new Person
-            {
-                id = IncrementAndGet(),
-                primeiroNome = "Pessoa Nome" + i,
-                UltimoNome = "Pessoa Sobrenome" + i,
-                Endereco = "Endereço da pessoa" + i,
-                Sexo = "Feminino"
-            };
-        }
 
-        private long IncrementAndGet()
+        private bool Exists(long id)
         {
-            return Interlocked.Increment(ref count);
+            return _context.Persons.Any(p => p.id.Equals(id));
         }
     }
 }
