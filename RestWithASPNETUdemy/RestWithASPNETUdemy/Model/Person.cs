@@ -1,6 +1,7 @@
-﻿
+﻿/* 
+  Classe para mapeamento ta tabela person.
+*/
 using System.ComponentModel.DataAnnotations.Schema;
-
 
 namespace RestWithASPNETUdemy.Model
 {
@@ -16,8 +17,6 @@ namespace RestWithASPNETUdemy.Model
         [Column("endereco")]
         public string Endereco { get; set; }
         [Column("Sexo")]
-        public string Sexo { get; set; }
-        
+        public string Sexo { get; set; }        
     }
-
 }
