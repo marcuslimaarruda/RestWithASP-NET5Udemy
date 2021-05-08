@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-
 using RestWithASPNETUdemy.Business;
 using RestWithASPNETUdemy.Data.VO;
-using RestWithASPNETUdemy.Model;
+using RestWithASPNETUdemy.Hypermedia.Filters;
+
 
 namespace RestWithASPNETUdemy.Controllers
 {
@@ -22,12 +22,14 @@ namespace RestWithASPNETUdemy.Controllers
         }
 
         [HttpGet]
+        [TypeFilter(typeof(HyperMediaFilter))] // Anotação para o HATEOAS
         public IActionResult Get()
         {
             return Ok(_personBusiness.FindAll());
         }
 
         [HttpGet("{id}")]
+        [TypeFilter(typeof(HyperMediaFilter))] // Anotação para o HATEOAS
         public IActionResult Get(long id)
         {
             var person = _personBusiness.FindById(id);
@@ -36,6 +38,7 @@ namespace RestWithASPNETUdemy.Controllers
         }
 
         [HttpPost("{id}")]
+        [TypeFilter(typeof(HyperMediaFilter))] // Anotação para o HATEOAS
         public IActionResult Post([FromBody] PersonVO person)
         {
             
@@ -44,6 +47,7 @@ namespace RestWithASPNETUdemy.Controllers
         }
 
         [HttpPut("{id}")]
+        [TypeFilter(typeof(HyperMediaFilter))] // Anotação para o HATEOAS
         public IActionResult Put([FromBody] PersonVO person)
         {
 
@@ -51,7 +55,7 @@ namespace RestWithASPNETUdemy.Controllers
             return Ok(_personBusiness.Update(person));
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}")]        
         public IActionResult Delete(long id)
         {
             _personBusiness.Delete(id);

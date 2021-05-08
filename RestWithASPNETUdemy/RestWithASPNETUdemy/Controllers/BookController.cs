@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 
 using RestWithASPNETUdemy.Business;
+using RestWithASPNETUdemy.Hypermedia.Filters;
 using RestWithASPNETUdemy.Model;
 
 namespace RestWithASPNETUdemy.Controllers
@@ -21,12 +22,14 @@ namespace RestWithASPNETUdemy.Controllers
         }
 
         [HttpGet]
+        [TypeFilter(typeof(HyperMediaFilter))] // Anotação para o HATEOAS
         public IActionResult Get()
         {
             return Ok(_bookBusiness.FindAll());
         }
 
         [HttpGet("{id}")]
+        [TypeFilter(typeof(HyperMediaFilter))] // Anotação para o HATEOAS
         public IActionResult Get(long id)
         {
             var book = _bookBusiness.FindById(id);
@@ -35,6 +38,7 @@ namespace RestWithASPNETUdemy.Controllers
         }
 
         [HttpPost("{id}")]
+        [TypeFilter(typeof(HyperMediaFilter))] // Anotação para o HATEOAS
         public IActionResult Post([FromBody] BookVO book)
         {
             
@@ -43,6 +47,7 @@ namespace RestWithASPNETUdemy.Controllers
         }
 
         [HttpPut("{id}")]
+        [TypeFilter(typeof(HyperMediaFilter))] // Anotação para o HATEOAS
         public IActionResult Put([FromBody] BookVO book)
         {
 
@@ -51,6 +56,7 @@ namespace RestWithASPNETUdemy.Controllers
         }
 
         [HttpDelete("{id}")]
+        
         public IActionResult Delete(long id)
         {
             _bookBusiness.Delete(id);

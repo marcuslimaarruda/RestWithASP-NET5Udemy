@@ -13,6 +13,8 @@ using System;
 using System.Collections.Generic;
 using RestWithASPNETUdemy.Repository.Generic;
 using Microsoft.Net.Http.Headers;
+using RestWithASPNETUdemy.Hypermedia.Filters;
+using RestWithASPNETUdemy.Hypermedia.Enricher;
 
 namespace RestWithASPNETUdemy
 {
@@ -60,6 +62,12 @@ namespace RestWithASPNETUdemy
            })
             .AddXmlSerializerFormatters();
 
+            // Injeção do serviço HATEOAS Hypermedia.
+            var filterOption = new HypeMediaFiltersOptions();
+            filterOption.ContentResponseEnricherList.Add(new PersonEnricher());
+
+            services.AddSingleton(filterOption);
+
 
             // Serviço de verssionamento
             services.AddApiVersioning();
@@ -91,6 +99,8 @@ namespace RestWithASPNETUdemy
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapControllerRoute("DefaultApi", "{controller=values}/{id?}"); // HATEOAS
+
             });
         }
 
