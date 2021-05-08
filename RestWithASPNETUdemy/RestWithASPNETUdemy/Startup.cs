@@ -8,10 +8,10 @@ using RestWithASPNETUdemy.Model.Context;
 using RestWithASPNETUdemy.Business;
 using RestWithASPNETUdemy.Repository;
 using RestWithASPNETUdemy.Business.Implementations;
-using RestWithASPNETUdemy.Repository.Implementations;
 using Serilog;
 using System;
 using System.Collections.Generic;
+using RestWithASPNETUdemy.Repository.Generic;
 
 namespace RestWithASPNETUdemy
 {
@@ -51,13 +51,16 @@ namespace RestWithASPNETUdemy
             // Serviço de verssionamento
             services.AddApiVersioning();
 
+            //Injeção de dependencia para o repository generico
+            services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
+
             //Injeção de dependencia para person
             services.AddScoped<IPersonBusiness, PersonBusinessImplementation>();
-            services.AddScoped<IPersonRepository, PersonRepositoryImplementation>();
+            //services.AddScoped<IPersonRepository, PersonRepositoryImplementation>();
 
-            //Injeção de dependencia para book
+            ////Injeção de dependencia para book
             services.AddScoped<IBookBusiness, BookBusinessImplementation>();
-            services.AddScoped<IBookRepository, BookRepositoryImplementation>();
+            //services.AddScoped<IBookRepository, BookRepositoryImplementation>();
 
         }
 

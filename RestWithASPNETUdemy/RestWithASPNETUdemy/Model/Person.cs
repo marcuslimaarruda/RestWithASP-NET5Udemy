@@ -1,15 +1,15 @@
 ﻿/* 
   Classe para mapeamento ta tabela person.
 */
+using RestWithASPNETUdemy.Model.Base;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RestWithASPNETUdemy.Model
 {
     [Table("person")]
-    public class Person
+    public class Person : BaseEntity
     {
-        [Column("id")]
-        public long id { get; set; }
+
         [Column("primeiro_nome")]
         public string primeiroNome { get; set; }
         [Column("ultimp_nome")]

@@ -1,17 +1,15 @@
 ﻿/* 
   Classe para mapeamento ta tabela Books.
 */
+using RestWithASPNETUdemy.Model.Base; // referencia para BaseEntity
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RestWithASPNETUdemy.Model
 {
     [Table("books")]
-    public class Book
+    public class Book : BaseEntity
     {
-        [Column("id")]
-        public int id { get; set; }
-
         [Column("author")]
         public string Author { get; set; }
 
