@@ -35,7 +35,7 @@ namespace RestWithASPNETUdemy.Controllers
         }
 
         [HttpPost("{id}")]
-        public IActionResult Post([FromBody] Book book)
+        public IActionResult Post([FromBody] BookVO book)
         {
             
             if (book == null) return BadRequest();
@@ -43,7 +43,7 @@ namespace RestWithASPNETUdemy.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put([FromBody] Book book)
+        public IActionResult Put([FromBody] BookVO book)
         {
 
             if (book == null) return BadRequest();

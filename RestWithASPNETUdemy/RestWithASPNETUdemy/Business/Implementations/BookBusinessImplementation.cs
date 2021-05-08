@@ -1,9 +1,8 @@
-﻿using RestWithASPNETUdemy.Model;
-using RestWithASPNETUdemy.Model.Context;
-using RestWithASPNETUdemy.Repository;
-using System;
+﻿using RestWithASPNETUdemy.Repository;
 using System.Collections.Generic;
-using System.Linq;
+using RestWithASPNETUdemy.Data.Converter.Implementations;
+using RestWithASPNETUdemy.Data.VO;
+using RestWithASPNETUdemy.Model;
 
 namespace RestWithASPNETUdemy.Business.Implementations
 {
@@ -11,29 +10,38 @@ namespace RestWithASPNETUdemy.Business.Implementations
     {
         
         private readonly IRepository<Book> _repository;
+        private readonly BookConverter _converter;
 
         public BookBusinessImplementation(IRepository<Book> repository)
         {
             _repository = repository;
+            _converter = new BookConverter();
         }
-        public List<Book> FindAll()
+        public List<BookVO> FindAll()
         {
-            return _repository.FindAll();
-        }
-
-        public Book FindById(long id)
-        {
-            return _repository.FindById(id);
+            return _converter.Parse(_repository.FindAll());
+            
         }
 
-        public Book Create(Book book)
+        public BookVO FindById(long id)
         {
-            return _repository.Create(book);
+            return _converter.Parse(_repository.FindById(id));
+        }
+
+        public BookVO Create(BookVO book)
+        {
+            var bookEntity = _converter.Parse(book);
+            bookEntity = _repository.Create(bookEntity);
+
+            return _converter.Parse(bookEntity);
         }
   
-        public Book Update(Book book)
+        public BookVO Update(BookVO book)
         {
-             return _repository.Update(book);
+            var bookEntity = _converter.Parse(book);
+            bookEntity = _repository.Update(bookEntity);
+
+            return _converter.Parse(bookEntity);
         }
         public void Delete(long id)
         {
