@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 using RestWithASPNETUdemy.Business;
 using RestWithASPNETUdemy.Data.VO;
 using RestWithASPNETUdemy.Hypermedia.Filters;
-
+using System.Collections.Generic;
 
 namespace RestWithASPNETUdemy.Controllers
 {
@@ -22,6 +22,10 @@ namespace RestWithASPNETUdemy.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(200, Type = typeof(List<PersonVO>))] // Customização do swagger
+        [ProducesResponseType(204)] // Customização do swagger
+        [ProducesResponseType(400)] // Customização do swagger
+        [ProducesResponseType(401)] // Customização do swagger
         [TypeFilter(typeof(HyperMediaFilter))] // Anotação para o HATEOAS
         public IActionResult Get()
         {
@@ -29,6 +33,10 @@ namespace RestWithASPNETUdemy.Controllers
         }
 
         [HttpGet("{id}")]
+        [ProducesResponseType(200, Type = typeof(PersonVO))] // Customização do swagger
+        [ProducesResponseType(204)] // Customização do swagger
+        [ProducesResponseType(400)] // Customização do swagger
+        [ProducesResponseType(401)] // Customização do swagger
         [TypeFilter(typeof(HyperMediaFilter))] // Anotação para o HATEOAS
         public IActionResult Get(long id)
         {
@@ -38,6 +46,9 @@ namespace RestWithASPNETUdemy.Controllers
         }
 
         [HttpPost("{id}")]
+        [ProducesResponseType(200, Type = typeof(PersonVO))] // Customização do swagger
+        [ProducesResponseType(400)] // Customização do swagger
+        [ProducesResponseType(401)] // Customização do swagger
         [TypeFilter(typeof(HyperMediaFilter))] // Anotação para o HATEOAS
         public IActionResult Post([FromBody] PersonVO person)
         {
@@ -47,6 +58,9 @@ namespace RestWithASPNETUdemy.Controllers
         }
 
         [HttpPut("{id}")]
+        [ProducesResponseType(200, Type = typeof(PersonVO))] // Customização do swagger
+        [ProducesResponseType(400)] // Customização do swagger
+        [ProducesResponseType(401)] // Customização do swagger
         [TypeFilter(typeof(HyperMediaFilter))] // Anotação para o HATEOAS
         public IActionResult Put([FromBody] PersonVO person)
         {
@@ -55,7 +69,10 @@ namespace RestWithASPNETUdemy.Controllers
             return Ok(_personBusiness.Update(person));
         }
 
-        [HttpDelete("{id}")]        
+        [HttpDelete("{id}")]
+        [ProducesResponseType(204)] // Customização do swagger
+        [ProducesResponseType(400)] // Customização do swagger
+        [ProducesResponseType(401)] // Customização do swagger
         public IActionResult Delete(long id)
         {
             _personBusiness.Delete(id);

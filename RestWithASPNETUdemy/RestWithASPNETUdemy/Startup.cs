@@ -15,11 +15,15 @@ using RestWithASPNETUdemy.Repository.Generic;
 using Microsoft.Net.Http.Headers;
 using RestWithASPNETUdemy.Hypermedia.Filters;
 using RestWithASPNETUdemy.Hypermedia.Enricher;
+using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Rewrite;
 
 namespace RestWithASPNETUdemy
 {
     public class Startup
     {
+        private RewriteOptions option; // Criada para uso na carga do swagger
+
         public IConfiguration Configuration { get; }
         public IWebHostEnvironment Enviroment { get;  }
 
@@ -31,10 +35,9 @@ namespace RestWithASPNETUdemy
             Log.Logger = new LoggerConfiguration()
                 .WriteTo.Console()
                 .CreateLogger();
-           
         }
 
-    
+            
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
@@ -68,12 +71,27 @@ namespace RestWithASPNETUdemy
 
             services.AddSingleton(filterOption);
 
-
             // Serviço de verssionamento
             services.AddApiVersioning();
 
+            // Adcionado o Swagger
+            services.AddSwaggerGen(c => {
+                c.SwaggerDoc("v1",
+                    new OpenApiInfo
+                    {
+                        Title = "REST API do zero com DotNet Core 5 e Docker",
+                        Version = "v1",
+                        Description = "Curso para construção de 'REST API do zero com DotNet Core 5 e Docker'",
+                        Contact = new OpenApiContact
+                        {
+                            Name = "Marcus Lima Arruda",
+                            Url = new Uri("https://github.com/marcuslimaarruda")
+                        }
+                    });
+            });
+
             //Injeção de dependencia para o repository generico
-            services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
+                services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
 
             //Injeção de dependencia para person
             services.AddScoped<IPersonBusiness, PersonBusinessImplementation>();
@@ -95,12 +113,25 @@ namespace RestWithASPNETUdemy
 
             app.UseHttpsRedirection();
             app.UseRouting();
+            // Adcionado o Swagger
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json",
+                    "Rest APIs From 0 to Azure with ASP.NET and Docker");
+            });
+
+            var option = new RewriteOptions();
+            option.AddRedirect("^$","swagger");
+
+            app.UseRewriter(option);
+
+            //------------
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
                 endpoints.MapControllerRoute("DefaultApi", "{controller=values}/{id?}"); // HATEOAS
-
             });
         }
 
