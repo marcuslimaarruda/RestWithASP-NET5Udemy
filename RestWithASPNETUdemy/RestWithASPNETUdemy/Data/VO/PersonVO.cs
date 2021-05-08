@@ -6,11 +6,11 @@ namespace RestWithASPNETUdemy.Data.VO
 
     public class PersonVO
     {
-        [JsonPropertyName("Codigo")]    
+        //[JsonPropertyName("Codigo")]    
         public long id { get; set; }
-        [JsonPropertyName("Primeiro Nome")]
+        //[JsonPropertyName("Primeiro Nome")]
         public string primeiroNome { get; set; }
-        [JsonPropertyName("Ultimo Nome")]
+        //[JsonPropertyName("Ultimo Nome")]
         public string UltimoNome { get; set; }
         public string Endereco { get; set; }
         //[JsonIgnore]
