@@ -12,6 +12,7 @@ using Serilog;
 using System;
 using System.Collections.Generic;
 using RestWithASPNETUdemy.Repository.Generic;
+using Microsoft.Net.Http.Headers;
 
 namespace RestWithASPNETUdemy
 {
@@ -47,6 +48,18 @@ namespace RestWithASPNETUdemy
             {
                // MigrateDatabase(connection);
             }
+
+            // Adcionando novo serviço para conversão para XML.
+            services.AddMvc(options =>
+           {
+               options.RespectBrowserAcceptHeader = true;
+
+               options.FormatterMappings.SetMediaTypeMappingForFormat("xnl", MediaTypeHeaderValue.Parse("aplication/xml"));
+               options.FormatterMappings.SetMediaTypeMappingForFormat("json", MediaTypeHeaderValue.Parse("aplication/json"));
+
+           })
+            .AddXmlSerializerFormatters();
+
 
             // Serviço de verssionamento
             services.AddApiVersioning();
