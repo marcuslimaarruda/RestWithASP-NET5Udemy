@@ -41,7 +41,13 @@ namespace RestWithASPNETUdemy
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-  
+            // A adição desse serviço evita o erro "CORS"
+            services.AddCors(options => options.AddDefaultPolicy(builder =>
+            {
+                builder.AllowAnyOrigin()
+                .AllowAnyMethod().AllowAnyHeader();
+            }));
+            
             services.AddControllers();
 
             // Conexão com MySQL
@@ -113,6 +119,11 @@ namespace RestWithASPNETUdemy
 
             app.UseHttpsRedirection();
             app.UseRouting();
+
+            // A adição do tratamento para evitar o erro CORS precisa ficar depois dos dois serviços acima
+            // e antes do app.UseEndpoints
+            app.UseCors();
+
             // Adcionado o Swagger
             app.UseSwagger();
             app.UseSwaggerUI(c =>
